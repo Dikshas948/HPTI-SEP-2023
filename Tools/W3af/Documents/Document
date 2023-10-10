@@ -1,1 +1,127 @@
+# Installation
+Prerequisites
 
+Make sure you have the following software ready before starting the installation:
+
+        Git client: sudo apt-get install git
+        Python 2.7, which is installed by default in most systems
+        Pip version 1.1: sudo apt-get install python-pip
+
+Installation
+
+git clone https://github.com/andresriancho/w3af.git
+cd w3af/
+./w3af_console
+. /tmp/w3af_dependency_install.sh
+
+Let me explain what’s going on there:
+
+        First we use git to download w3af’s source code
+        Then we try to run the w3af_console command, which will most likely fail because of missing dependencies. This command will generate a helper script at /tmp/w3af_dependency_install.sh that when run will install all the required dependencies.
+        Dependencies are installed by running /tmp/w3af_dependency_install.sh
+
+The framework dependencies don’t change too often, but don’t be alarmed if after updating your installation w3af requires you to install new dependencies.
+Supported platforms
+
+The framework should work on all Python supported platforms and has been tested in various Linux distributions, Mac OSX, FreeBSD and OpenBSD.
+One of the ugly details users can find is that w3af needs to detect the Operating System / Linux distribution, and then have support for creating the /tmp/w3af_dependency_install.sh for that specific combination. In other words, for Ubuntu we use apt-get install and for Suse we use yum install.
+
+The list of distributions w3af knows how to generate the installation script for is extensive . If we don’t support your distribution, we’ll default to Ubuntu.
+Installation in Kali
+
+The easiest way to install w3af in Kali is:
+
+apt-get update
+apt-get install -y w3af
+
+This will install the latest packaged version, which might not be the latest available from our repositories. If the latest version is needed these steps are recommended:
+
+cd ~
+apt-get update
+apt-get install -y python-pip w3af
+pip install --upgrade pip
+git clone https://github.com/andresriancho/w3af.git
+cd w3af
+./w3af_console
+. /tmp/w3af_dependency_install.sh
+
+This will install the latest w3af at ~/w3af/w3af_console and leave the packaged version un-touched.
+
+nstalling using Docker
+
+Docker is awesome, it allows users to run w3af without installing any of it’s dependencies. The only pre-requisite is to install docker , which is widely supported.
+
+Once the docker installation is running these steps will yield a running w3af console:
+
+$ git clone https://github.com/andresriancho/w3af.git
+$ cd w3af/extras/docker/scripts/
+$ sudo ./w3af_console_docker
+w3af>>>
+
+For advanced usage of w3af’s docker container please read the documentation at the docker registry hub
+Installation in Mac OSX
+
+In order to start the process, you need XCode and MacPorts installed.
+
+sudo xcode-select --install
+sudo port selfupdate
+sudo port upgrade outdated
+sudo port install python27
+sudo port select python python27
+sudo port install py27-pip
+sudo port install py27-libdnet git-core automake gcc48 py27-setuptools autoconf py27-pcapy
+./w3af_console
+. /tmp/w3af_dependency_install.sh
+
+Those commands should allow you to run ./w3af_console again without any issues, in order to run the GUI a new dependency set is required:
+
+sudo port install py27-pygtk py27-pygtksourceview graphviz
+sudo port install py27-webkitgtk
+./w3af_gui
+. /tmp/w3af_dependency_install.sh
+
+# Introduction
+
+Before running w3af users need to know the basics about how the application works behind the scenes. This will enable users to be more efficient in the process of identifying and exploiting vulnerabilities.
+Main plugin types
+
+The framework has three main plugins types: crawl, audit and attack.
+Crawl plugins
+
+They have only one responsibility, finding new URLs, forms, and other injection points. A classic example of a discovery plugin is the web spider. This plugin takes a URL as input and returns one or more injection points.
+
+When a user enables more than one plugin of this type, they are run in a loop: If plugin A finds a new URL in the first run, the w3af core will send that URL to plugin B. If plugin B then finds a new URL, it will be sent to plugin A. This process will go on until all plugins have run and no more information about the application can be found.
+Audit plugins
+
+Take the injection points found by crawl plugins and send specially crafted data to all in order to identify vulnerabilities. A classic example of an audit plugin is one that searches for SQL injection vulnerabilities by sending a'b"c to all injection points.
+Attack plugins
+
+Their objective is to exploit vulnerabilities found by audit plugins. They usually return a shell on the remote server, or a dump of remote tables in the case of SQL injection exploits.
+Other plugins
+Infrastructure
+
+Identify information about the target system such as installed WAF (web application firewalls), operating system and HTTP daemon.
+Grep
+
+Analyze HTTP requests and responses which are sent by other plugins and identify vulnerabilities. For example, a grep plugin will find a comment in the HTML body that has the word “password” and generate a vulnerability.
+Output
+
+The way the framework and plugins communicate with the user. Output plugins save the data to a text, xml or html file. Debugging information is also sent to the output plugins and can be saved for analysis.
+
+Messages sent to the output manager are sent to all enabled plugins, so if you have enabled text_file and xml_file output plugins, both will log any vulnerabilities found by an audit plugin.
+
+
+Mangle
+
+Allow modification of requests and responses based on regular expressions, think “sed (stream editor) for the web”.
+Bruteforce
+
+Bruteforce logins found during the crawl phase.
+Evasion
+
+Evade simple intrusion detection rules by modifying the HTTP traffic generated by other plugins.
+Scan configuration
+
+After configuring the crawl and audit plugins, and setting the target URL the user starts the scan and waits for the vulnerabilities to appear in the user interface.
+
+Any vulnerabilities which are found during the scan phase are stored in a knowledge base; which is used as the input for the attack plugins. Once the scan finishes the user will be able to execute the attack plugins on the identified vulnerabilities.
