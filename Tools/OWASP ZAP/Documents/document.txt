@@ -3,8 +3,6 @@ OWASP ZAP
 #Introduction
 The OWASP Zed Attack Proxy (ZAP) is an easy to use integrated penetration testing tool for finding vulnerabilities in web applications.
 
-It is designed to be used by people with a wide range of security experience and as such is ideal for developers and functional testers who are new to penetration testing as well as being a useful addition to an experienced pen testers toolbox.
-
 #Synopsis
 Click on the owasp zap icon to run the program
 
@@ -46,14 +44,6 @@ The ZAP Desktop UI is composed of the following elements:
     Information Window – Displays details of the automated and manual tools.
     Footer – Displays a summary of the alerts found and the status of the main automated tools.
 
-While using ZAP, you can click Help on the Menu Bar or press F1 to access context-sensitive help from the ZAP Desktop User Guide. It is also available online.
-
-For more information about the UI, see ZAP UI Overview in the ZAP online documentation.
-
-ZAP also supports a powerful API and command line functionality, both of which are beyond the scope of this guide.
-
-IMPORTANT: You should only use ZAP to attack an application you have permission to test with an active attack. Because this is a simulation that acts like a real attack, actual damage can be done to a site’s functionality, data, etc. If you are worried about using ZAP, you can prevent it from causing harm (though ZAP’s functionality will be significantly reduced) by switching to safe mode.
-
 To switch ZAP to safe mode, click the arrow on the mode dropdown on the main toolbar to expand the dropdown list and select Safe Mode.
 
 # Running an Automated Scan
@@ -78,14 +68,14 @@ For AJAX applications, ZAP’s AJAX spider is likely to be more effective. This 
 ZAP will passively scan all of the requests and responses proxied through it. So far ZAP has only carried out passive scans of your web application. Passive scanning does not change responses in any way and is considered safe. Scanning is also performed in a background thread to not slow down exploration. Passive scanning is good at finding some vulnerabilities and as a way to get a feel for the basic security state of a web application and locate where more investigation may be warranted.
 
 Active scanning, however, attempts to find other vulnerabilities by using known attacks against the selected targets. Active scanning is a real attack on those targets and can put the targets at risk, so do not use active scanning against targets you do not have permission to test.
+
 # Interpret Your Test Results
-
 As ZAP spiders your web application, it constructs a map of your web applications’ pages and the resources used to render those pages. Then it records the requests and responses sent to each page and creates alerts if there is something potentially wrong with a request or response.
+
 # See Explored Pages
-
 To examine a tree view of the explored pages, click the Sites tab in the Tree Window. You can expand the nodes to see the individual URLs accessed.
-# View Alerts and Alert Details
 
+# View Alerts and Alert Details
 The left-hand side of the Footer contains a count of the Alerts found during your test, broken out into risk categories. These risk categories are:
 
 To view the alerts created during your test:
@@ -95,7 +85,6 @@ To view the alerts created during your test:
     In the Workspace Windows, click the Response tab to see the contents of the header and body of the response. The part of the response that generated the alert will be highlighted.
 
 # Exploring an Application Manually
-
 The passive scanning and automated attack functionality is a great way to begin a vulnerability assessment of your web application but it has some limitations. Among these are:
 
     Any pages protected by a login page are not discoverable during a passive scan because, unless you’ve configured ZAP’s authentication functionality, ZAP will not handle the required authentication.
@@ -158,4 +147,9 @@ ZAP is an ideal tool to use in automation and supports a range of options:
     Docker Packaged Scans
     GitHub Actions
     Automation Framework
-    API and Daemon mode
+    API and Daemon model
+
+Author
+This manual page was written by Diksha Sharma for the Debian system (but may be used by others). Permission is granted to
+copy, distribute and/or modify this document under the terms of the GNU General Public License, Version 2 or any later version published by the
+Free Software Foundation On Debian systems, the complete text of the GNU General Public License can be found in /usr/share/common-licenses/GPL.
